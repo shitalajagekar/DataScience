@@ -1,0 +1,197 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
+</head>
+<body>
+
+<center>
+<button type="button" onclick="save()">Save</button>
+<input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute">Clear</input>
+ 
+<!--drop down box for selected colors.-->
+<p>
+    <label>Color: <select id="selectedColor">
+            <option value="Red">Red</option>
+			<option value="Black">Balck</option>
+            <option value="Blue">Blue</option>
+            <option value="Green">Green</option>
+			<option value="Aqua ">Aqua </option>
+			<option value="Brown">Brown</option>
+			<option value="Chartreuse "> Chartreuse </option>
+			<option value="Cyan ">Cyan </option>
+			<option value="Gray">Gray</option>
+			<option value="DarkMagenta ">DarkMagenta </option>
+			<option value="DarkOrange " >DarkOrange </option>
+			<option value="DarkSalmon " >DarkSalmon </option>
+			<option value="DarkViolet  " >DarkViolet  </option>
+			<option value="Indigo" >Indigo   </option>
+			<option value="LawnGreen  " >LawnGreen  </option>
+			<option value="LightCoral  " >LightCoral  </option>
+			<option value="Yellow" >Yellow </option>
+			<option value="Orchid">Orchid </option>
+			<option value="SandyBrown"> SandyBrown </option>
+    </select></label>
+</p>
+<!--drop down box for selected drawing tools-->
+<p>
+    <label>Stitching Tool: <select id="selectedTool">
+            <option value="crayon">crayon</option>
+            <option value="pencil">Pencil</option>
+           
+    </select></label>
+</p>
+
+<div style="background-color: #c1f0c1;width:500px;height:500px">
+<canvas id="canvas" width="500" height="500"></canvas>
+</div>
+</center>
+<script>
+context = document.getElementById('canvas').getContext("2d");
+canvas = document.getElementById('canvas');
+        w = canvas.width;
+        h = canvas.height; 
+		
+$('#canvas').mousedown(function(e){
+  var mouseX = e.pageX - this.offsetLeft;
+  var mouseY = e.pageY - this.offsetTop;
+  var colorvar="Black";	
+	var tool="pencil";
+  paint = true;
+  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+  redraw();
+});
+$('#canvas').mousemove(function(e){
+  if(paint){
+    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+	addcolor();
+    redraw();
+  }
+});
+$('#canvas').mouseup(function(e){
+  paint = false;
+});
+$('#canvas').mouseleave(function(e){
+  paint = false;
+});
+var clickX = new Array();
+var clickY = new Array();
+var clickDrag = new Array();
+var paint;
+function addClick(x, y, dragging)
+{
+  clickX.push(x);
+  clickY.push(y);
+  clickDrag.push(dragging);
+}
+function redraw(){
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+  
+  addcolor()
+  <!-- context.strokeStyle = "#df4b26";-->
+  context.lineJoin = "round";
+  context.lineWidth = 5;
+			
+  for(var i=0; i < clickX.length; i++) {		
+    context.beginPath();
+    if(clickDrag[i] && i){
+      context.moveTo(clickX[i-1], clickY[i-1]);
+     }else{
+       context.moveTo(clickX[i]-1, clickY[i]);
+     }
+     context.lineTo(clickX[i], clickY[i]);
+	 context.closePath();
+     context.stroke();
+  }
+}
+function addcolor() {
+	var colorobj = document.getElementById('selectedColor').value;
+        switch (colorobj) {
+            case "Green":
+                colorvar = "Green";
+                break;
+            case "Blue":
+                colorvar = "Blue";
+                break;
+            case "Red":
+                colorvar = "Red";
+                break;
+            case "Yellow":
+                colorvar = "Yellow";
+                break;
+            case "Orange":
+                colorvar = "Orange";
+                break;
+            case "Balck":
+                colorvar = "Balck";
+                break;
+            case "Aqua":
+                colorvar = "Aqua";
+                break;
+			case "Brown":
+                colorvar = "Brown";
+                break;
+			case "Chartreuse ":
+                colorvar = "Chartreuse ";
+                break;
+			case "Cyan ":
+                colorvar= "Cyan ";
+                break;
+			case "Gray":
+                colorvar= "Gray";
+                break;
+			case "Magenta ":
+                colorvar = "Magenta ";
+                break;
+			case "Salmon ":
+                colorvar = "Salmon ";
+                break;
+			case "DarkViolet  ":
+                colorvar= "DarkViolet  ";
+                break;
+			case "Indigo   ":
+                colorvar= "Indigo   ";
+                break;
+			case "LawnGreen  ":
+                colorvar = "LawnGreen  ";
+                break;
+			case "LightCoral  ":
+                colorvar = "LightCoral  ";
+                break;
+			case "Yellow ":
+                colorvar= "Yellow ";
+                break;
+			case "Orchid ":
+                colorvar = "Orchid ";
+                break;
+			case "SandyBrown ":
+                colorvar= "SandyBrown ";
+                break;
+								
+        }
+		context.strokeStyle = colorvar;
+            
+    }
+
+
+
+function save() {
+  var canvas = document.getElementById("canvas");
+  var data = canvas.toDataURL();
+   console.log(data);
+   
+   console.log("shitaal");
+  <!--  var blob = new Blob([data],{type:"image/png", encoding: 'utf-8'});-->
+    <!-- saveAs(blob,"m.png"); -->
+	
+}
+
+function erase(){
+
+   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  
+  
+}
+</script>
+</body>
+</html>
